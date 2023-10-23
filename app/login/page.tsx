@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { Button, FilledInput, FormControl, Grid, IconButton, InputAdornment, InputLabel, TextField, Typography } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+var cookie = require("@boiseitguru/cookie-cutter");
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -16,7 +17,8 @@ export default function LoginPage() {
     event.preventDefault();
   };
   const handleLogin = () => {
-    
+    cookie.set("user", user)
+    cookie.set("password", password)
   }
   return (
     <Box
@@ -62,7 +64,7 @@ export default function LoginPage() {
         <Grid item xs={4}></Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
-          <Button variant="contained" fullWidth size='large' onClick={handleLogin}>Logar</Button>
+          <Button variant="contained"  href='/admin' fullWidth size='large' onClick={handleLogin}>Logar</Button>
         </Grid>
         <Grid item xs={4}></Grid>
       </Grid>
