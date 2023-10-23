@@ -90,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <AlertTitle>Obrigado</AlertTitle>
             Você doou com sucesso um token.
           </Alert>
+          <br />
             {children}
           </Box>
         </ThemeRegistry>
