@@ -13,6 +13,12 @@ export default function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/admin', req.url))
    }
    else{
+      if(user){
+         req.cookies.delete("user")
+      }
+      if(password){
+         req.cookies.delete("password")
+      }
       if(path == '/login'){
          return NextResponse.next()
       }

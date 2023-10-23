@@ -7,12 +7,17 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [user, setUser] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+  const handleLogin = () => {
+    
+  }
   return (
     <Box
       sx={{
@@ -27,15 +32,16 @@ export default function LoginPage() {
       <Grid container spacing={2}>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
-          <TextField id="user" fullWidth label="User" variant="filled" />
+          <TextField id="user" fullWidth label="User" variant="filled" value={user} onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setUser(event.target.value); console.log(event.target.value) }} />
         </Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
           <FormControl variant="filled"
-            fullWidth>
+            fullWidth >
             <InputLabel htmlFor="password">Password</InputLabel>
             <FilledInput
+              value={password} onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setPassword(event.target.value); console.log(event.target.value) }}
               id="password"
               type={showPassword ? 'text' : 'password'}
               endAdornment={
@@ -56,7 +62,7 @@ export default function LoginPage() {
         <Grid item xs={4}></Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
-          <Button variant="contained" fullWidth size='large'>Logar</Button>
+          <Button variant="contained" fullWidth size='large' onClick={handleLogin}>Logar</Button>
         </Grid>
         <Grid item xs={4}></Grid>
       </Grid>
