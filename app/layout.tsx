@@ -10,8 +10,7 @@ import ThemeRegistry from '../components/ThemeRegistry/ThemeRegistry';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Head from 'next/head';
 import Image from 'next/image';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
+import Alerta from '@/components/alerta';
 
 export const metadata = {
   title: 'Git Token Donation'
@@ -86,10 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               p: 3,
             }}
           >
-          <Alert severity="success">
-            <AlertTitle>Obrigado</AlertTitle>
-            Você doou com sucesso um token.
-          </Alert>
+            <Alerta />
           <br />
             {children}
           </Box>
