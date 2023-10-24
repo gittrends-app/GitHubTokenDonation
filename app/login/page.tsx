@@ -34,7 +34,7 @@ export default function LoginPage() {
       <Grid container spacing={2}>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
-          <TextField id="user" fullWidth label="User" variant="filled" value={user} onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setUser(event.target.value); console.log(event.target.value) }} />
+          <TextField id="user" fullWidth label="User" variant="filled" value={user} onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setUser(event.target.value); }} />
         </Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}></Grid>
@@ -43,7 +43,7 @@ export default function LoginPage() {
             fullWidth >
             <InputLabel htmlFor="password">Password</InputLabel>
             <FilledInput
-              value={password} onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setPassword(event.target.value); console.log(event.target.value) }}
+              value={password} onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setPassword(event.target.value); }}
               id="password"
               type={showPassword ? 'text' : 'password'}
               endAdornment={

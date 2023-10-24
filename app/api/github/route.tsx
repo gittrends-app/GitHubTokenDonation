@@ -15,7 +15,6 @@ export async function GET(req: NextRequest) {
             if (response){
                 try{
                     let data = JSON.parse(await response.text())
-                    console.log(data)
                     if (data?.access_token)
                         return data.access_token
                     else
@@ -26,7 +25,6 @@ export async function GET(req: NextRequest) {
             }
             return null;
         })
-        console.log(ghToken)
         if(ghToken)
             return NextResponse.json({ ghToken: ghToken }, { status: 200 });
         else
