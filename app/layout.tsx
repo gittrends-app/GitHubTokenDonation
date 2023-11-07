@@ -10,7 +10,6 @@ import ThemeRegistry from '../components/ThemeRegistry/ThemeRegistry';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Head from 'next/head';
 import Image from 'next/image';
-import Alerta from '@/components/alerta';
 
 export const metadata = {
   title: 'Git Token Donation'
@@ -19,8 +18,8 @@ export const metadata = {
 const DRAWER_WIDTH = 240;
 
 const LINKS = [
-  { text: 'Home', href: '/', icon: HomeIcon },
-  { text: 'Admin', href: '/admin', icon: AdminPanelSettingsIcon },
+  { text: process.env.NEXT_PUBLIC_HOME_BUTTON, href: '/', icon: HomeIcon },
+  { text: process.env.NEXT_PUBLIC_ADMIN_BUTTON, href: '/admin', icon: AdminPanelSettingsIcon },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -51,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 justifyContent: "center",
               }}
             >
-              <Image src="/images/logo-white.png" alt='' width={100} height={100}></Image>
+              <Image src="/images/logo-white.png" alt='Logo' width={100} height={100}></Image>
             </div>
             <div
               style={{
@@ -59,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 justifyContent: "center",
               }}
             >
-              <Typography variant='h5' color="secondary">GitTrends</Typography>
+              <Typography variant='h5' color="secondary">{process.env.NEXT_PUBLIC_NAME}</Typography>
             </div>
 
             <br />
@@ -85,8 +84,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               p: 3,
             }}
           >
-            <Alerta />
-          <br />
             {children}
           </Box>
         </ThemeRegistry>

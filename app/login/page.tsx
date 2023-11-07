@@ -29,7 +29,7 @@ export default function LoginPage() {
         alignItems: 'center',
       }}
     >
-      <Typography variant='h2' color='primary'>Login</Typography>
+      <Typography variant='h2' color='primary'>Admin</Typography>
       <br />
       <Grid container spacing={2}>
         <Grid item xs={4}></Grid>
@@ -64,7 +64,7 @@ export default function LoginPage() {
         <Grid item xs={4}></Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
-          <Button variant="contained"  href='/admin' fullWidth size='large' onClick={handleLogin}>Logar</Button>
+          <Button variant="contained"  href='/admin' fullWidth size='large' onClick={handleLogin}>Login</Button>
         </Grid>
         <Grid item xs={4}></Grid>
       </Grid>
