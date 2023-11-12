@@ -4,12 +4,13 @@ import Box from '@mui/material/Box';
 import { Button, FilledInput, FormControl, Grid, IconButton, InputAdornment, InputLabel, TextField, Typography } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-var cookie = require("@boiseitguru/cookie-cutter");
+import { useCookies } from 'next-client-cookies';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [user, setUser] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const cookie = useCookies();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -19,6 +20,7 @@ export default function LoginPage() {
   const handleLogin = () => {
     cookie.set("user", user)
     cookie.set("password", password)
+    window.location.assign(process.env.NEXT_PUBLIC_MY_URL + "/admin");
   }
   return (
     <Box

@@ -6,9 +6,10 @@ import Button from '@mui/material/Button';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Alerta from '@/components/alerta';
 import Image from 'next/image';
-var cookie = require("@boiseitguru/cookie-cutter");
+import { useCookies } from 'next-client-cookies';
 
 export default function HomePage() {
+  const cookie = useCookies();
 
   function handleLogin() {
     if (!cookie.get("ghUser")) {

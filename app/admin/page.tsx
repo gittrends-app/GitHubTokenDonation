@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
-var cookie = require("@boiseitguru/cookie-cutter");
+import { useCookies } from 'next-client-cookies';
 
 interface User {
   ghId: number;
@@ -13,6 +13,7 @@ export default function AdminPage() {
   const [users, setUsers] = React.useState<User[]>([])
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const cookie = useCookies();
 
   React.useEffect(() => {
     var login = cookie.get("user");
@@ -54,7 +55,7 @@ export default function AdminPage() {
     </Typography>
     <br />
       {
-        users.length > 0 &&
+        (users && users.length > 0) &&
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="">
           <TableHead>
@@ -67,7 +68,7 @@ export default function AdminPage() {
           <TableBody>
             {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
               <TableRow
-                key={user.name}
+                key={user.ghId}
                 sx={{ '&:last-child td, &:last-child th': { border: 0, color: '#68b2b1', backgroundColor: 'white' } }}
               >
                 <TableCell component="th" scope="row">

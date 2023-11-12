@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
             await client.connect()
             const db = client.db("GitTokenDonation")
             const collection = db.collection("ghUsers")
+            collection.createIndex({'ghId': 1}, {unique: true})
     
             var ghUsers = await collection.find({}).toArray();
             if(ghUsers)

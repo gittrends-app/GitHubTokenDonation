@@ -10,7 +10,6 @@
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
   },
   "dependencies": {
-    "@boiseitguru/cookie-cutter": "^0.2.1",
     "@emotion/cache": "latest",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
@@ -18,8 +17,10 @@
     "@mui/material": "latest",
     "mongodb": "^6.2.0",
     "next": "latest",
+    "next-client-cookies": "^1.0.6",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "resend": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "latest",
