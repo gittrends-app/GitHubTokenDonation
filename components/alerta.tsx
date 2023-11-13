@@ -67,7 +67,7 @@ export default function Alerta() {
             {
                 logged &&
                 <Alert severity="success">
-                    <AlertTitle>{process.env.NEXT_PUBLIC_THANKS_TITLE} {user.name}</AlertTitle>
+                    <AlertTitle>{user.name}, {process.env.NEXT_PUBLIC_THANKS_TITLE} </AlertTitle>
                     {process.env.NEXT_PUBLIC_THANKS_MESSAGE}
                 </Alert>
             }
