@@ -83,11 +83,11 @@ export default function SideDrawer() {
           variant="text"
           color='secondary' size="large"
         >
-          <Button href='/'><HomeIcon /> Home</Button>
-          <Button href='/admin'><AdminPanelSettingsIcon /> Admin</Button>
+          <Button href='/'><HomeIcon />  {process.env.NEXT_PUBLIC_HOME_BUTTON}</Button>
+          <Button href='/admin'><AdminPanelSettingsIcon />  {process.env.NEXT_PUBLIC_ADMIN_BUTTON}</Button>
           {
             logged &&
-            <Button onClick={handleLogout} color='error'><LogoutIcon /> Logout</Button>
+            <Button onClick={handleLogout} color='error'><LogoutIcon /> {process.env.NEXT_PUBLIC_ADMIN_LOGOUT_BUTTON}</Button>
           }
         </ButtonGroup>
         <Divider />
