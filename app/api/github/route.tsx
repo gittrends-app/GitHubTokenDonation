@@ -43,7 +43,9 @@ export async function GET(req: NextRequest) {
                 user = await getUserGH(token)
                 if (user) {
                     await setUserDB(user)
-                    await sendEmail(user)
+                    if(process.env.SMTP){
+                        await sendEmail(user)
+                    }
                     return NextResponse.json({ user: user }, { status: 200 });
                 }
                 return NextResponse.json({ error: process.env.NEXT_PUBLIC_GH_ERROR_MESSAGE }, { status: 500 });
