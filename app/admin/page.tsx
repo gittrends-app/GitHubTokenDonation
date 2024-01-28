@@ -24,7 +24,7 @@ export default function AdminPage() {
         'Content-type': 'application/json',
       },
       body: JSON.stringify({ login: login, password: password })
-    }).catch((error) => { console.log(error) }).then((response) => {
+    }).catch((error) => { }).then((response) => {
       if (response)
         return response.json()
     }).then((users) => {

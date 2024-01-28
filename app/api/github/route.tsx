@@ -1,6 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 import { MongoClient } from "mongodb"
-import { Resend } from "resend";
 
 interface User {
     ghId: number;
@@ -77,7 +76,6 @@ async function setUserDB(user: User) {
         collection.insertOne(user)
         return;
     } catch (error) {
-        console.log(error)
         return
     }
 }
@@ -121,20 +119,26 @@ async function getUserGH(token: string): Promise<User | undefined> {
 }
 
 async function sendEmail(user: User) {
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    let nodemailer = require('nodemailer')
     const emailDestino = process.env.ADMIN_EMAIL_SECRET + '';
     try {
-        await resend.emails.send({
-            from: 'Git Token Donation <onboarding@resend.dev>',
+        const transporter = nodemailer.createTransport({
+            port: process.env.SMTP_PORT,
+            host: process.env.SMTP_HOST,
+            auth: {
+              user: process.env.SMTP_USER,
+              pass: process.env.SMTP_PASSWORD,
+            },
+            secure: process.env.SMTP_AUTH,
+          }); 
+          await transporter.sendMail({
+            from: 'Git Token Donation <'+process.env.SMTP_USER+'>',
             to: [emailDestino],
             subject: 'Novo Token doado',
             html: '<div><h1>Novo token recebido de: ' + user.ghId + '-'+ user.name +'!</h1><br /><code>'+ user.oauth + '</code></div>'
         });
-        console.log("enviado")
         return;
     } catch (error) {
-        console.log("errou")
-        console.log(error);
         return;
     }
 
