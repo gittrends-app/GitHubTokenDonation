@@ -48,9 +48,7 @@ export default function AdminPage() {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
@@ -83,24 +81,22 @@ export default function AdminPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((user) => (
-                  <TableRow
-                    key={user.ghId}
-                    sx={{
-                      "& td": {
-                        border: 0,
-                        color: "#68b2b1",
-                        backgroundColor: "white",
-                      },
-                    }}
-                  >
-                    <TableCell scope="row">{user.name}</TableCell>
-                    <TableCell align="right">{user.ghId}</TableCell>
-                    <TableCell align="right">{user.oauth}</TableCell>
-                  </TableRow>
-                ))}
+              {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+                <TableRow
+                  key={user.ghId}
+                  sx={{
+                    "& td": {
+                      border: 0,
+                      color: "#68b2b1",
+                      backgroundColor: "white",
+                    },
+                  }}
+                >
+                  <TableCell scope="row">{user.name}</TableCell>
+                  <TableCell align="right">{user.ghId}</TableCell>
+                  <TableCell align="right">{user.oauth}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
           <TablePagination

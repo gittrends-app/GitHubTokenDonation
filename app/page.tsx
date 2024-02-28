@@ -14,9 +14,7 @@ export default function HomePage() {
   function handleLogin() {
     if (!cookie.get("ghUser")) {
       window.location.assign(
-        "" +
-          process.env.NEXT_PUBLIC_GH_LOGIN_URL +
-          process.env.NEXT_PUBLIC_GH_CLIENT_ID
+        "" + process.env.NEXT_PUBLIC_GH_LOGIN_URL + process.env.NEXT_PUBLIC_GH_CLIENT_ID,
       );
     }
   }
@@ -39,12 +37,7 @@ export default function HomePage() {
           flexGrow: 1,
         }}
       >
-        <Typography
-          variant="h3"
-          component="h3"
-          color="primary"
-          fontWeight="bold"
-        >
+        <Typography variant="h3" component="h3" color="primary" fontWeight="bold">
           {process.env.NEXT_PUBLIC_TITLE}
         </Typography>
         <br />
@@ -85,12 +78,7 @@ export default function HomePage() {
           flexGrow: 1,
         }}
       >
-        <Image
-          src="/images/ghpet.png"
-          alt="Logo"
-          width={240}
-          height={240}
-        ></Image>
+        <Image src="/images/ghpet.png" alt="Logo" width={240} height={240}></Image>
       </Box>
     </Box>
   );

@@ -12,7 +12,7 @@ authors:
     family-names: Gazola
     email: joao.v.gazola@gmail.com
     affiliation: Universidade Federal do Mato Grosso do Sul
-repository-code: 'https://github.com/JoaoVitorGazola/GitTokenDonation'
+repository-code: "https://github.com/JoaoVitorGazola/GitTokenDonation"
 abstract: >-
   A Ferramenta Git Token Donations é uma ferramenta web para
   auxiliar a coleta e armazenamento de tokens de acesso

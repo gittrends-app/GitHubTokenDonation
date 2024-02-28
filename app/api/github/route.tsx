@@ -42,9 +42,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
 
     cookies().set("ghUser", JSON.stringify(user));
 
-    return NextResponse.redirect(
-      Object.assign(req.nextUrl.clone(), { pathname: "/" })
-    );
+    return NextResponse.redirect(Object.assign(req.nextUrl.clone(), { pathname: "/" }));
   }
 }
 
@@ -61,7 +59,7 @@ async function getUserGH(token: string): Promise<User | undefined> {
     headers: { Authorization: "Bearer " + token },
   })
     .then((response) => response.json())
-    .then((data) => ({ ghId: data.id, name: data.name, oauth: token } as User));
+    .then((data) => ({ ghId: data.id, name: data.name, oauth: token }) as User);
 }
 
 async function sendEmail(user: User) {

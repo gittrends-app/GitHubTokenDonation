@@ -38,9 +38,7 @@ export default function Alerta(props: { sx: SxProps }) {
       {error && (
         <Alert severity="error" {...props}>
           <AlertTitle>{process.env.NEXT_PUBLIC_ERROR_TITLE}</AlertTitle>
-          {errorMsg != ""
-            ? errorMsg
-            : process.env.NEXT_PUBLIC_UNEXPECTED_ERROR_MESSAGE}
+          {errorMsg != "" ? errorMsg : process.env.NEXT_PUBLIC_UNEXPECTED_ERROR_MESSAGE}
         </Alert>
       )}
     </Box>
