@@ -1,17 +1,26 @@
 import { NextResponse, NextRequest } from "next/server";
 import { MongoClient } from "mongodb";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { NextApiResponse } from "next";
 
-interface User {
-  ghId: number;
+export interface GitHubUser {
+  [key: string]: any;
+  id: number;
+  login: string;
+  avatar_url: string;
   name: string;
-  oauth: string;
+  email: string;
 }
+
+export interface GitHubToken {
+  user: GitHubUser;
+  access_token: string;
+  donated_at: Date;
+}
+
 const client = new MongoClient(process.env.DB_URL + "");
 
-export async function GET(req: NextRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest) {
   var code = req.nextUrl.searchParams.get("code");
   var token = req.nextUrl.searchParams.get("token");
 
@@ -36,8 +45,9 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
     var user = await getUserGH(token);
 
     if (user) {
-      await setUserDB(user);
-      if (process.env.SMTP) await sendEmail(user);
+      const donation = { user, access_token: token, donated_at: new Date() };
+      await setUserDB(donation);
+      if (process.env.SMTP) await sendEmail(donation);
     }
 
     cookies().set("ghUser", JSON.stringify(user));
@@ -46,23 +56,20 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
   }
 }
 
-async function setUserDB(user: User) {
+async function setUserDB(user: GitHubToken) {
   await client.connect();
   const collection = client.db("GitTokenDonation").collection("ghUsers");
   return collection.insertOne(user).finally(() => client.close());
 }
 
-async function getUserGH(token: string): Promise<User | undefined> {
-  var token = token;
+async function getUserGH(token: string): Promise<GitHubUser> {
   return fetch(process.env.GH_AP_URL + "user", {
     method: "GET",
     headers: { Authorization: "Bearer " + token },
-  })
-    .then((response) => response.json())
-    .then((data) => ({ ghId: data.id, name: data.name, oauth: token }) as User);
+  }).then((response) => response.json());
 }
 
-async function sendEmail(user: User) {
+async function sendEmail(user: GitHubToken) {
   let nodemailer = require("nodemailer");
   const emailDestino = process.env.ADMIN_EMAIL_SECRET + "";
   try {
@@ -76,16 +83,16 @@ async function sendEmail(user: User) {
       secure: process.env.SMTP_AUTH,
     });
     await transporter.sendMail({
-      from: "Git Token Donation <" + process.env.SMTP_USER + ">",
+      from: `Git Token Donation <${process.env.SMTP_USER}>`,
       to: [emailDestino],
-      subject: "Novo Token doado",
+      subject: `[${process.env.NODE_ENV || "development"}] Novo Token doado`,
       html:
         "<div><h1>Novo token recebido de: " +
-        user.ghId +
+        user.user.id +
         "-" +
-        user.name +
+        user.user.name +
         "!</h1><br /><code>" +
-        user.oauth +
+        user.access_token +
         "</code></div>",
     });
     return;

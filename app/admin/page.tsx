@@ -13,14 +13,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useCookies } from "next-client-cookies";
+import { GitHubToken } from "../api/github/route";
 
-interface User {
-  ghId: number;
-  name: string;
-  oauth: string;
-}
 export default function AdminPage() {
-  const [users, setUsers] = React.useState<User[]>([]);
+  const [users, setUsers] = React.useState<GitHubToken[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const cookie = useCookies();
@@ -83,7 +79,7 @@ export default function AdminPage() {
             <TableBody>
               {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
                 <TableRow
-                  key={user.ghId}
+                  key={user.user.id}
                   sx={{
                     "& td": {
                       border: 0,
@@ -92,9 +88,9 @@ export default function AdminPage() {
                     },
                   }}
                 >
-                  <TableCell scope="row">{user.name}</TableCell>
-                  <TableCell align="right">{user.ghId}</TableCell>
-                  <TableCell align="right">{user.oauth}</TableCell>
+                  <TableCell scope="row">{user.user.name}</TableCell>
+                  <TableCell align="right">{user.user.id}</TableCell>
+                  <TableCell align="right">{user.access_token}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
