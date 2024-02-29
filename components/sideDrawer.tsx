@@ -1,7 +1,7 @@
 "use client";
+
 import * as React from "react";
 import Drawer from "@mui/material/Drawer";
-import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -9,33 +9,12 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import HomeIcon from "@mui/icons-material/Home";
-import { useCookies } from "next-client-cookies";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 export default function SideDrawer() {
-  const [logged, setLogged] = React.useState(false);
-  const cookies = useCookies();
-
-  React.useEffect(() => {
-    if (cookies.get("user")) {
-      if (cookies.get("password")) {
-        setLogged(true);
-      } else {
-        cookies.remove("user");
-        setLogged(false);
-      }
-    } else if (cookies.get("password")) {
-      cookies.remove("password");
-      setLogged(false);
-    }
-  }, []);
-
-  function handleLogout() {
-    cookies.remove("user");
-    cookies.remove("password");
-    setLogged(false);
-    window.location.assign(process.env.NEXT_PUBLIC_MY_URL + "/login");
-  }
+  const { data: session } = useSession();
 
   return (
     <Drawer
@@ -48,7 +27,7 @@ export default function SideDrawer() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: logged ? "start" : "center",
+          justifyContent: session?.user ? "start" : "center",
         },
         display: { xs: "none", md: "block" },
       }}
@@ -72,29 +51,24 @@ export default function SideDrawer() {
         </Typography>
       </Link>
 
-      {logged && (
-        <>
-          <br />
-          <Divider />
-          <ButtonGroup
-            orientation="vertical"
-            aria-label="vertical contained button group"
-            variant="text"
-            color="secondary"
-            size="large"
-          >
-            <Button href="/">
-              <HomeIcon /> {process.env.NEXT_PUBLIC_HOME_BUTTON}
-            </Button>
-            <Button href="/admin">
-              <AdminPanelSettingsIcon /> {process.env.NEXT_PUBLIC_ADMIN_BUTTON}
-            </Button>
-            <Button onClick={handleLogout} color="error">
-              <LogoutIcon /> {process.env.NEXT_PUBLIC_ADMIN_LOGOUT_BUTTON}
-            </Button>
-          </ButtonGroup>
-          <Divider />
-        </>
+      {session?.user && (
+        <ButtonGroup
+          orientation="vertical"
+          aria-label="vertical contained button group"
+          variant="text"
+          color="secondary"
+          size="large"
+        >
+          <Button href="/" LinkComponent={Link}>
+            <HomeIcon /> {process.env.NEXT_PUBLIC_HOME_BUTTON}
+          </Button>
+          <Button href="/admin" LinkComponent={Link}>
+            <AdminPanelSettingsIcon /> {process.env.NEXT_PUBLIC_ADMIN_BUTTON}
+          </Button>
+          <Button onClick={() => signOut({ callbackUrl: "/" })} color="error">
+            <LogoutIcon /> {process.env.NEXT_PUBLIC_ADMIN_LOGOUT_BUTTON}
+          </Button>
+        </ButtonGroup>
       )}
     </Drawer>
   );

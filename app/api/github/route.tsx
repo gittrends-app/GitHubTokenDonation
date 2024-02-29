@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import { cookies } from "next/headers";
-import { NextApiResponse } from "next";
+import { omitBy } from "lodash";
 
 export interface GitHubUser {
   [key: string]: any;
@@ -45,7 +45,11 @@ export async function GET(req: NextRequest) {
     var user = await getUserGH(token);
 
     if (user) {
-      const donation = { user, access_token: token, donated_at: new Date() };
+      const donation = {
+        user: omitBy(user, (_, key) => key.endsWith("_url")) as GitHubUser,
+        access_token: token,
+        donated_at: new Date(),
+      };
       await setUserDB(donation);
       if (process.env.SMTP) await sendEmail(donation);
     }
@@ -56,10 +60,12 @@ export async function GET(req: NextRequest) {
   }
 }
 
-async function setUserDB(user: GitHubToken) {
+async function setUserDB(data: GitHubToken) {
   await client.connect();
   const collection = client.db("GitTokenDonation").collection("ghUsers");
-  return collection.insertOne(user).finally(() => client.close());
+  return collection
+    .updateOne({ _id: data.user.id as any }, { $set: data }, { upsert: true })
+    .finally(() => client.close());
 }
 
 async function getUserGH(token: string): Promise<GitHubUser> {

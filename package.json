@@ -16,16 +16,21 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "lodash": "^4.17.21",
     "mongodb": "^6.2.0",
     "next": "latest",
+    "next-auth": "4",
     "next-client-cookies": "^1.0.6",
     "nodemailer": "^6.9.8",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "swr": "^2.2.5",
+    "usehooks-ts": "^2.15.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.1",
     "@commitlint/config-conventional": "^19.0.0",
+    "@types/lodash": "^4.14.202",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

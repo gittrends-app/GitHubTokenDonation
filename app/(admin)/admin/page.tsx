@@ -1,4 +1,5 @@
 "use client";
+
 import * as React from "react";
 import Box from "@mui/material/Box";
 import {
@@ -12,33 +13,16 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useCookies } from "next-client-cookies";
-import { GitHubToken } from "../api/github/route";
+import { GitHubToken } from "../../api/github/route";
+import useSWR from "swr";
 
 export default function AdminPage() {
-  const [users, setUsers] = React.useState<GitHubToken[]>([]);
+  const { data: tokens } = useSWR<GitHubToken[]>("/api/admin", (url: string) =>
+    fetch(url).then((res) => res.json()),
+  );
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const cookie = useCookies();
-
-  React.useEffect(() => {
-    var login = cookie.get("user");
-    var password = cookie.get("password");
-    fetch(process.env.NEXT_PUBLIC_MY_URL + "/api/admin", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ login: login, password: password }),
-    })
-      .catch((error) => {})
-      .then((response) => {
-        if (response) return response.json();
-      })
-      .then((users) => {
-        setUsers(users.ghUsers);
-      });
-  }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -62,7 +46,7 @@ export default function AdminPage() {
         Tabela de tokens doados
       </Typography>
       <br />
-      {users && users.length > 0 && (
+      {tokens && tokens.length > 0 && (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="">
             <TableHead>
@@ -77,7 +61,7 @@ export default function AdminPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+              {tokens.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
                 <TableRow
                   key={user.user.id}
                   sx={{
@@ -98,7 +82,7 @@ export default function AdminPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 100]}
             component="div"
-            count={users.length}
+            count={tokens.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

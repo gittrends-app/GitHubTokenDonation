@@ -14,24 +14,20 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useCookies } from "next-client-cookies";
+import { useSessionStorage } from "usehooks-ts";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = React.useState(false);
-  const [user, setUser] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const cookie = useCookies();
+
+  const [user, setUser] = React.useState<string | undefined>(undefined);
+  const [password, setPassword] = React.useState<string | undefined>(undefined);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
-  const handleLogin = () => {
-    cookie.set("user", user);
-    cookie.set("password", password);
-    window.location.assign(process.env.NEXT_PUBLIC_MY_URL + "/admin");
-  };
   return (
     <Box
       sx={{
@@ -53,7 +49,6 @@ export default function LoginPage() {
             fullWidth
             label="User"
             variant="filled"
-            value={user}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setUser(event.target.value);
             }}
@@ -65,7 +60,6 @@ export default function LoginPage() {
           <FormControl variant="filled" fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
             <FilledInput
-              value={password}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setPassword(event.target.value);
               }}
@@ -73,12 +67,7 @@ export default function LoginPage() {
               type={showPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton
-                    aria-label="Ver senha"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
+                  <IconButton aria-label="Ver senha" onClick={handleClickShowPassword} edge="end">
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
@@ -89,7 +78,16 @@ export default function LoginPage() {
         <Grid item xs={4}></Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
-          <Button variant="contained" href="/admin" fullWidth size="large" onClick={handleLogin}>
+          <Button
+            variant="contained"
+            fullWidth
+            size="large"
+            onClick={() => {
+              if (user && password) {
+                signIn("credentials", { callbackUrl: "/admin", user, password });
+              }
+            }}
+          >
             Login
           </Button>
         </Grid>
