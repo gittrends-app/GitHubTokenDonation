@@ -1,15 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import ThemeRegistry from "../components/ThemeRegistry/ThemeRegistry";
-import { ClientCookiesProvider } from "@/components/cookiesProvider";
-import { cookies } from "next/headers";
+import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
+import SideDrawer from "@/components/SideDrawer";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import SessionProvider from "@/context/ClientProvider";
+import { CookiesProvider } from "next-client-cookies/server";
 
 import "./globals.css";
-
-import SideDrawer from "@/components/sideDrawer";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
-import SessionProvider from "@/context/client-provider";
 
 export const metadata = {
   title: "Git Token Donation",
@@ -22,7 +20,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="pt-BR">
       <body>
         <ThemeRegistry>
-          <ClientCookiesProvider value={cookies().getAll()}>
+          <CookiesProvider>
             <SessionProvider session={session}>
               <SideDrawer />
               <Box
@@ -41,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 {children}
               </Box>
             </SessionProvider>
-          </ClientCookiesProvider>
+          </CookiesProvider>
         </ThemeRegistry>
       </body>
     </html>

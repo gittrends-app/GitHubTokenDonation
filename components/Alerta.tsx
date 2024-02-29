@@ -3,34 +3,37 @@
 import * as React from "react";
 import { Alert, AlertTitle, Box, SxProps } from "@mui/material";
 import { useCookies } from "next-client-cookies";
+import { GitHubUser } from "@/app/api/github/route";
+import { getGithubProfile } from "@/helpers/github";
 
 export default function Alerta(props: { sx: SxProps }) {
   const [logged, setLogged] = React.useState(false);
-  const [error, setError] = React.useState(false);
-  const [errorMsg, setErrorMsg] = React.useState("");
-  const [user, setUser] = React.useState({ name: "", ghId: "", token: "" });
+  const [error, setError] = React.useState<string | undefined>();
+  const [user, setUser] = React.useState<GitHubUser | undefined>();
   const cookie = useCookies();
 
   React.useEffect(() => {
-    var userPlainText = cookie.get("ghUser");
-    if (userPlainText) {
-      setUser(JSON.parse(userPlainText));
-      sucesso();
+    var token = cookie.get("access_token");
+    if (token) {
+      getGithubProfile(token)
+        .then((user) => setUser(user))
+        .then(() => {
+          setLogged(true);
+          setError(undefined);
+        })
+        .catch((error) => {
+          setError(error.message);
+          setLogged(false);
+        });
     }
-  }, []);
-
-  function sucesso() {
-    setLogged(true);
-    setError(false);
-    setErrorMsg("");
-  }
+  }, [cookie]);
 
   return (
     <Box>
       {logged && (
         <Alert severity="success" {...props}>
           <AlertTitle>
-            {user.name}, {process.env.NEXT_PUBLIC_THANKS_TITLE}{" "}
+            {user?.name}, {process.env.NEXT_PUBLIC_THANKS_TITLE}{" "}
           </AlertTitle>
           {process.env.NEXT_PUBLIC_THANKS_MESSAGE}
         </Alert>
@@ -38,7 +41,7 @@ export default function Alerta(props: { sx: SxProps }) {
       {error && (
         <Alert severity="error" {...props}>
           <AlertTitle>{process.env.NEXT_PUBLIC_ERROR_TITLE}</AlertTitle>
-          {errorMsg != "" ? errorMsg : process.env.NEXT_PUBLIC_UNEXPECTED_ERROR_MESSAGE}
+          {error || process.env.NEXT_PUBLIC_UNEXPECTED_ERROR_MESSAGE}
         </Alert>
       )}
     </Box>

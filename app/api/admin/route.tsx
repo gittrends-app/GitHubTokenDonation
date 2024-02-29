@@ -7,7 +7,7 @@ export async function GET() {
   try {
     await client.connect();
     const db = client.db("GitTokenDonation");
-    const collection = db.collection("ghUsers");
+    const collection = db.collection("tokens");
 
     var tokens = await collection.find({}).toArray();
     return NextResponse.json(tokens, { status: 200 });

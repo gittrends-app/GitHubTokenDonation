@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { MongoClient, ObjectId } from "mongodb";
 import { cookies } from "next/headers";
 import { omitBy } from "lodash";
+import { getGithubProfile } from "../../../helpers/github";
 
 export interface GitHubUser {
   [key: string]: any;
@@ -33,7 +34,7 @@ export async function GET(req: NextRequest) {
       "&code=" +
       code;
 
-    token = await fetch(process.env.NEXT_PUBLIC_GH_AUTH_URL + parameters, {
+    token = await fetch("https://github.com/login/oauth/access_token" + parameters, {
       method: "POST",
       headers: { Accept: "application/json" },
     })
@@ -42,7 +43,7 @@ export async function GET(req: NextRequest) {
   }
 
   if (token) {
-    var user = await getUserGH(token);
+    var user = await getGithubProfile(token);
 
     if (user) {
       const donation = {
@@ -54,7 +55,7 @@ export async function GET(req: NextRequest) {
       if (process.env.SMTP) await sendEmail(donation);
     }
 
-    cookies().set("ghUser", JSON.stringify(user));
+    cookies().set("access_token", token);
 
     return NextResponse.redirect(Object.assign(req.nextUrl.clone(), { pathname: "/" }));
   }
@@ -62,17 +63,10 @@ export async function GET(req: NextRequest) {
 
 async function setUserDB(data: GitHubToken) {
   await client.connect();
-  const collection = client.db("GitTokenDonation").collection("ghUsers");
+  const collection = client.db("GitTokenDonation").collection("tokens");
   return collection
     .updateOne({ _id: data.user.id as any }, { $set: data }, { upsert: true })
     .finally(() => client.close());
-}
-
-async function getUserGH(token: string): Promise<GitHubUser> {
-  return fetch(process.env.GH_AP_URL + "user", {
-    method: "GET",
-    headers: { Authorization: "Bearer " + token },
-  }).then((response) => response.json());
 }
 
 async function sendEmail(user: GitHubToken) {

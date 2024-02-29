@@ -1,23 +1,17 @@
 "use client";
+
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import Alerta from "@/components/alerta";
+import Alerta from "@/components/Alerta";
 import Image from "next/image";
 import { useCookies } from "next-client-cookies";
+import { Button } from "@mui/material";
 
 export default function HomePage() {
   const cookie = useCookies();
 
-  function handleLogin() {
-    if (!cookie.get("ghUser")) {
-      window.location.assign(
-        "" + process.env.NEXT_PUBLIC_GH_LOGIN_URL + process.env.NEXT_PUBLIC_GH_CLIENT_ID,
-      );
-    }
-  }
   return (
     <Box
       sx={{
@@ -62,7 +56,15 @@ export default function HomePage() {
           size="large"
           color="primary"
           sx={{ color: "white", fontWeight: "bold", fontSize: "1.25rem" }}
-          onClick={handleLogin}
+          disabled={cookie.get("access_token") ? true : false}
+          onClick={() => {
+            if (!cookie.get("access_token")) {
+              window.location.assign(
+                "https://github.com/login/oauth/authorize?client_id=" +
+                  process.env.NEXT_PUBLIC_GH_CLIENT_ID,
+              );
+            }
+          }}
         >
           <GitHubIcon style={{ marginRight: 5 }} />
           {process.env.NEXT_PUBLIC_DONATE_BUTTON}
