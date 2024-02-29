@@ -15,6 +15,8 @@ RUN yarn install --frozen-lockfile
 
 FROM deps as build
 
+ARG DB_URL=mongodb://localhost:27017/?retryWrites=true&w=majority
+
 RUN yarn build \
   && rm -rf node_modules \
   && yarn install --production
