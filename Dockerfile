@@ -28,5 +28,5 @@ COPY --from=build /usr/src/app/.next .next
 COPY --from=build /usr/src/app/public public
 COPY --from=build /usr/src/app/package.json package.json
 
-CMD PORT=80 yarn start
+CMD PORT=80 yarn start -H 0.0.0.0 -p 80
 
