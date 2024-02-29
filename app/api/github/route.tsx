@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
 
     cookies().set("access_token", token);
 
-    return NextResponse.redirect(Object.assign(req.nextUrl.clone(), { pathname: "/" }));
+    return NextResponse.redirect(process.env.NEXTAUTH_URL as string);
   }
 }
 
