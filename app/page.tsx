@@ -69,7 +69,7 @@ export default function HomePage() {
                 "https://github.com/login/oauth/authorize?" +
                   new URLSearchParams({
                     client_id: process.env.NEXT_PUBLIC_GH_CLIENT_ID as string,
-                    scope: process.env.NEXT_PUBLIC_GH_SCOPES || "public_repo,read:org,read:user",
+                    scope: process.env.NEXT_PUBLIC_GH_SCOPES || "public_repo,read:user",
                   }).toString(),
               );
             }
