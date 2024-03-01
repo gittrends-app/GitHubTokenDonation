@@ -3,6 +3,8 @@ import { NextResponse, NextRequest } from "next/server";
 
 const client = new MongoClient(process.env.DB_URL + "");
 
+export const revalidate = 0;
+
 export async function GET() {
   try {
     await client.connect();
