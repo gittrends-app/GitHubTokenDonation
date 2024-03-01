@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "np": "np --no-tests"
   },
   "dependencies": {
     "@emotion/cache": "latest",
