@@ -18,7 +18,7 @@ import useSWR from "swr";
 
 export default function AdminPage() {
   const { data: tokens } = useSWR<GitHubToken[]>("/api/admin", (url: string) =>
-    fetch(url).then((res) => res.json()),
+    fetch(url, { next: { revalidate: 30 } }).then((res) => res.json()),
   );
 
   const [page, setPage] = React.useState(0);
