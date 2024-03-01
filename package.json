@@ -39,6 +39,7 @@
     "eslint": "latest",
     "eslint-config-next": "latest",
     "husky": "^9.0.11",
+    "np": "^10.0.0",
     "prettier": "^3.2.5",
     "typescript": "latest"
   },
@@ -46,5 +47,9 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "np": {
+    "tests": false,
+    "publish": false
   }
 }
