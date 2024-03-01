@@ -1,9 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import { cookies } from "next/headers";
 import { omitBy } from "lodash";
 import { getGithubProfile } from "@/helpers/github";
-import { version } from "@/package.json";
 
 export interface GitHubUser {
   [key: string]: any;
@@ -27,18 +26,18 @@ export async function GET(req: NextRequest) {
   var token = req.nextUrl.searchParams.get("token");
 
   if (code) {
-    var parameters =
-      "?client_id=" +
-      process.env.NEXT_PUBLIC_GH_CLIENT_ID +
-      "&client_secret=" +
-      process.env.GH_CLIENT_SECRET +
-      "&code=" +
-      code;
-
-    token = await fetch("https://github.com/login/oauth/access_token" + parameters, {
-      method: "POST",
-      headers: { Accept: "application/json" },
-    })
+    token = await fetch(
+      "https://github.com/login/oauth/access_token?" +
+        new URLSearchParams({
+          client_id: process.env.GH_CLIENT_ID as string,
+          client_secret: process.env.GH_CLIENT_SECRET as string,
+          code: code,
+        }).toString(),
+      {
+        method: "POST",
+        headers: { Accept: "application/json" },
+      },
+    )
       .then((response) => response.json())
       .then(async (data) => (data?.access_token ? data.access_token : null));
   }
@@ -57,7 +56,7 @@ export async function GET(req: NextRequest) {
     }
 
     cookies().set("access_token", token);
-    cookies().set("app_version", version);
+    cookies().set("app_version", process.env.APP_VERSION || "unknown");
 
     return NextResponse.redirect(process.env.NEXTAUTH_URL as string);
   }
