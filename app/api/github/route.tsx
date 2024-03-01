@@ -2,7 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { MongoClient, ObjectId } from "mongodb";
 import { cookies } from "next/headers";
 import { omitBy } from "lodash";
-import { getGithubProfile } from "../../../helpers/github";
+import { getGithubProfile } from "@/helpers/github";
+import { version } from "@/package.json";
 
 export interface GitHubUser {
   [key: string]: any;
@@ -56,6 +57,7 @@ export async function GET(req: NextRequest) {
     }
 
     cookies().set("access_token", token);
+    cookies().set("app_version", version);
 
     return NextResponse.redirect(process.env.NEXTAUTH_URL as string);
   }

@@ -8,9 +8,15 @@ import Alerta from "@/components/Alerta";
 import Image from "next/image";
 import { useCookies } from "next-client-cookies";
 import { Button } from "@mui/material";
+import { version } from "@/package.json";
 
 export default function HomePage() {
   const cookie = useCookies();
+
+  React.useEffect(() => {
+    if (cookie.get("app_version") !== version) cookie.remove("access_token");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box
