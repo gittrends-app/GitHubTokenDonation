@@ -60,8 +60,11 @@ export default function HomePage() {
           onClick={() => {
             if (!cookie.get("access_token")) {
               window.location.assign(
-                "https://github.com/login/oauth/authorize?client_id=" +
-                  process.env.NEXT_PUBLIC_GH_CLIENT_ID,
+                "https://github.com/login/oauth/authorize?" +
+                  new URLSearchParams({
+                    client_id: process.env.NEXT_PUBLIC_GH_CLIENT_ID as string,
+                    scopes: process.env.NEXT_PUBLIC_GH_SCOPES || "public_repo,read:org,read:user",
+                  }).toString(),
               );
             }
           }}
