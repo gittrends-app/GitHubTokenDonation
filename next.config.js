@@ -4,6 +4,7 @@ const packageJson = require("./package.json");
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  output: "standalone",
   modularizeImports: {
     "@mui/icons-material": {
       transform: "@mui/icons-material/{{member}}",

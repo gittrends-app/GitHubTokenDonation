@@ -1,6 +1,43 @@
 version: "3"
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXTAUTH_URL: ${NEXTAUTH_URL?Variable not set}
+        NEXTAUTH_SECRET: ${NEXTAUTH_SECRET?Variable not set}
+        GH_CLIENT_ID: ${GH_CLIENT_ID?Variable not set}
+        GH_CLIENT_SECRET: ${GH_CLIENT_SECRET?Variable not set}
+        ADMIN_LOGIN_SECRET: ${ADMIN_LOGIN_SECRET?Variable not set}
+        ADMIN_EMAIL_SECRET: ${ADMIN_EMAIL_SECRET?Variable not set}
+        ADMIN_PASSWORD_SECRET: ${ADMIN_PASSWORD_SECRET?Variable not set}
+        SMTP: ${SMTP?Variable not set}
+        SMTP_HOST: ${SMTP_HOST?Variable not set}
+        SMTP_PORT: ${SMTP_PORT?Variable not set}
+        SMTP_AUTH: ${SMTP_AUTH?Variable not set}
+        SMTP_USER: ${SMTP_USER?Variable not set}
+        SMTP_PASSWORD: ${SMTP_PASSWORD?Variable not set}
+        DB_URL: ${DB_URL?Variable not set}
+        NEXT_PUBLIC_NAME: ${NEXT_PUBLIC_NAME?Variable not set}
+        NEXT_PUBLIC_TITLE: ${NEXT_PUBLIC_TITLE?Variable not set}
+        NEXT_PUBLIC_MESSAGE: ${NEXT_PUBLIC_MESSAGE?Variable not set}
+        NEXT_PUBLIC_DONATE_BUTTON: ${NEXT_PUBLIC_DONATE_BUTTON?Variable not set}
+        NEXT_PUBLIC_HOME_BUTTON: ${NEXT_PUBLIC_HOME_BUTTON?Variable not set}
+        NEXT_PUBLIC_ADMIN_BUTTON: ${NEXT_PUBLIC_ADMIN_BUTTON?Variable not set}
+        NEXT_PUBLIC_ADMIN_LOGOUT_BUTTON: ${NEXT_PUBLIC_ADMIN_LOGOUT_BUTTON?Variable not set}
+        NEXT_PUBLIC_THANKS_TITLE: ${NEXT_PUBLIC_THANKS_TITLE?Variable not set}
+        NEXT_PUBLIC_THANKS_MESSAGE: ${NEXT_PUBLIC_THANKS_MESSAGE?Variable not set}
+        NEXT_PUBLIC_ERROR_TITLE: ${NEXT_PUBLIC_ERROR_TITLE?Variable not set}
+        NEXT_PUBLIC_DB_ERROR_MESSAGE: ${NEXT_PUBLIC_DB_ERROR_MESSAGE?Variable not set}
+        NEXT_PUBLIC_GH_ERROR_MESSAGE: ${NEXT_PUBLIC_GH_ERROR_MESSAGE?Variable not set}
+        NEXT_PUBLIC_UNEXPECTED_ERROR_MESSAGE: ${NEXT_PUBLIC_UNEXPECTED_ERROR_MESSAGE?Variable not set}
+    ports:
+      - "3000:80"
+    env_file:
+      - .env
+
   mongo:
     image: mongo:latest
     restart: always
